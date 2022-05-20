@@ -40,8 +40,9 @@ contract crowdFunding {
         );
         require(contributors[msg.sender] > 0);
         address payable user = payable(msg.sender);
-        user.transfer(contributors[msg.sender]);
         contributors[msg.sender] = 0;
+        user.transfer(contributors[msg.sender]);
+        
     }
 
     struct Request {
@@ -87,8 +88,8 @@ contract crowdFunding {
     }
 
     function makePayment(uint256 _requestNumber) public onlyManager {
-        require(raisedAmount >= target);
         Request storage thisRequest = requests[_requestNumber];
+        require(raisedAmount >= thisRequest.value);
         require(
             thisRequest.completed == false,
             "this request has been completed"
